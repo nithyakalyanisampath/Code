@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+ char *decimal_to_binary(int);
+
+int main(int argc, char **argv)
+{
+     if(argc<2){ 
+        printf("please enter the address you want to check in the terminal ; Like this ./arm 0x5600 \n");
+    return 0;
+    
+    }
+
+    u_int32_t encode = strtoul(argv[1], NULL, 0);
+    int rotate,canbeDone,length=32;
+    char *binVal;
+   
+   
+    for (rotate = 0; rotate < 32; rotate += 2)
+    {
+        // print an encoding if the only significant bits 
+        // fit into an 8-bit immediate
+        if (!(encode & ~0xffU))
+        {
+            binVal = decimal_to_binary(encode);
+            printf("Legal, Rotate field is : %d , immedidate field is 0x%02X \n",rotate/2,encode);
+            
+
+            printf(" Binary value of immediate field is : %s \n" ,binVal);
+            
+            canbeDone=1;
+            break;
+        }
+       
+
+        // rotate left by two
+        encode = (encode << 2) | (encode >> 30);
+       // printf("encode is %02X \n",encode);
+    }
+
+    if(!canbeDone){
+        printf("Not legal \n");
+
+    }
+    return 0;
+    //Nithya praying that this works
+}
+
+char *decimal_to_binary(int encode)
+{
+  int count, shift, t;
+  char *val;
+
+  t = 0;
+  val = (char*)malloc(32+1);
+    if (val == NULL)
+    exit(EXIT_FAILURE);
+// since our immediate field is only 8 bits wide
+  for (count = 7 ; count >= 0 ; count--)
+  {
+    shift = encode >> count;
+
+    if (shift & 1)
+      *(val+t) = 1 + '0';
+    else
+      *(val+t) = 0 + '0';
+
+    t++;
+  }
+  *(val+t) = '\0';
+
+  return  val;
+}
