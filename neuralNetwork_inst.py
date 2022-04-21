@@ -23,3 +23,12 @@ image_array = numpy.asfarray(all_values[1:]).reshape((28,28))
 plt.imshow(image_array,cmap='Greys',interpolation = 'None')
 
 plt.show()
+
+scaled_input = (numpy.asfarray(all_values[1:])/255.0 *.99)+ 0.01
+print(scaled_input)
+
+#output nodes is 10
+onodes=10
+targets = numpy.zeros(onodes)+0.01
+targets[int(all_values[0])]= 0.99
+print(targets)
