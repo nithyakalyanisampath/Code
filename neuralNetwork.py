@@ -1,3 +1,9 @@
+# /*----------------------------------------------------------------------------------
+# * Author        : Nithya Sampath
+# * File name     : neuralNetwork.py
+# * Description   : 3 layer neural network to identify characters 
+# *-----------------------------------------------------------------------------------*/
+
 import numpy
 import scipy.special
 #Neural Network Class definition
@@ -43,6 +49,12 @@ class neuralNetwork:
 
         # hidden layer errors
         hidden_errors = numpy.dot(self.who.T,output_errors)
+
+        #update the weights for the link between the hidden layer and output layers
+        self.who += self.lr *numpy.dot((output_errors * final_outputs *(1-final_outputs)),numpy.transpose(hidden_outputs))
+
+        #update the weights between the input and the hidden layer
+        self.wih += self.lr *numpy.dot ((hidden_errors * hidden_outputs * (1-hidden_outputs)),numpy.transpose(inputs))
 
         pass
 
